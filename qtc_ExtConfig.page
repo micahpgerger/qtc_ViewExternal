@@ -1,0 +1,77 @@
+<apex:page sidebar="false" showHeader="false" applyHtmlTag="false">
+<title>External Config</title>
+<head>
+        <meta charset="utf-8"></meta>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+        <title>External Config</title>
+
+        <!-- Bootstrap 4 CSS min CDN link -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+      		integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" 
+      		crossorigin="anonymous"></link>
+        <!-- easyXDM.min.js compiled and minified JavaScript -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/easyXDM/2.4.20/easyXDM.min.js"
+            crossorigin="anonymous"></script>
+
+    </head>
+
+    <body>
+        <br/>
+        <br/>
+        <div class="container-fluid">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <!--label class="col-sm-2 control-label" for="output">Output</label-->
+                    <div class="col-sm-12">
+                        <!--input id="output" type="text" class="form-control" placeholder='Initial Message' /-->
+                        <textarea id="output" rows="10" cols="80" class="form-control" placeholder='Initial Message'></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-6 col-sm-6">
+                        <button type="button" class="btn btn-primary" onclick="broadcast()">Submit</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="container-fluid">
+                <pre id="demo"></pre>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var rpc = new easyXDM.Rpc({}, {
+                remote: {
+                    postMessage: {}
+                },
+                local: {
+                    postMessage: function (message) {
+                        document.getElementById('output').value = message;
+                        var myDataIn = JSON.parse(message);
+                        document.getElementById("demo").innerHTML = JSON.stringify(myDataIn, undefined, 2);
+                    }
+                }
+            });
+
+            function broadcast() {;
+                var myData = JSON.parse(document.getElementById('output').value);
+                var myJSON = JSON.stringify(myData);
+                document.getElementById('output').value = myJSON;
+                rpc.postMessage(myJSON);
+            }
+        </script>
+
+        <!-- jQuery + Popper + Bootstrap JS CDN -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" 
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" 
+            crossorigin="anonymous"></script>
+            
+    </body>
+</apex:page>
